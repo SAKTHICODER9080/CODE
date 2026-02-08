@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="icon" href="favicon.png">
+    <style>
+        /* --- General Styling & Dark Theme --- */
+        :root {
+            --bg-color: #1a1a2e;          /* Main dark background */
+            --card-bg: #16213e;           /* Slightly lighter background for cards/panels */
+            --text-color: #eee;          /* Main text color */
+            --primary-color: #0fbcf9;    /* A vibrant cyan/teal for buttons and highlights */
+            --border-color: #2a2a4e;     /* Subtle border color */
+            --header-bg: #0f3460;        /* Table header background */
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Login Box Styling --- */
+        #loginBox {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 350px;
+            text-align: center;
+        }
+
+        #loginBox h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            box-sizing: border-box; /* Important for padding */
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #0a9bc7; /* Darker shade of primary color */
+            transform: translateY(-2px);
+        }
+
+        /* --- Admin Panel Styling --- */
+        #adminPanel {
+            width: 95%;
+            max-width: 1200px;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        #adminPanel h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* --- Table Styling --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--header-bg);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s;
+        }
+        
+        tbody tr:hover {
+            background-color: rgba(15, 188, 249, 0.1); /* Subtle highlight on hover */
+        }
+
+        /* --- Status Dropdown Styling --- */
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 🔐 ADMIN LOGIN -->
+<div id="loginBox" class="login-box">
+    <h2>Admin Login</h2>
+    <form onsubmit="login(); return false;">
+        <input type="text" id="user" placeholder="Username" required>
+        <input type="password" id="pass" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<!-- 📋 ADMIN PANEL -->
+<div id="adminPanel" class="hidden">
+    <h2>Admin Panel - Complaint List</h2>
+    <button onclick="logout()" style="width: auto; margin-bottom: 20px; background-color: #c0392b;">Logout</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Issue</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+/* 🔐 LOGIN LOGIC */
+function login() {
+    const user = document.getElementById("user").value;
+    const pass = document.getElementById("pass").value;
+
+    if (user === "admin" && pass === "admin123") {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminPanel").classList.remove("hidden");
+        loadComplaints();
+    } else {
+        alert("Invalid Login");
+    }
+}
+
+/* 📥 LOGOUT FUNCTION */
+function logout() {
+    document.getElementById("adminPanel").classList.add("hidden");
+    document.getElementById("loginBox").style.display = "block";
+    // Clear fields for security
+    document.getElementById("user").value = '';
+    document.getElementById("pass").value = '';
+}
+
+/* 📥 LOAD COMPLAINTS */
+function loadComplaints() {
+    fetch("http://localhost:8080/api/admin/complaints")
+        .then(res => res.json())
+        .then(data => {
+            const body = document.getElementById("tableBody");
+            body.innerHTML = "";
+
+            data.forEach(c => {
+                const row = `
+                    <tr>
+                        <td>${c.complaintNumber}</td>
+                        <td>${c.name}</td>
+                        <td>${c.description}</td>
+                        <td>
+                            <select onchange="updateStatus('${c.complaintNumber}', this.value)">
+                                <option value="Pending" ${c.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="In Progress" ${c.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="Resolved" ${c.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+                            </select>
+                        </td>
+                        <td>✔</td>
+                    </tr>
+                `;
+                body.innerHTML += row;
+            });
+        });
+}
+
+/* 🔄 UPDATE STATUS */
+function updateStatus(id, status) {
+    fetch(`http://localhost:8080/api/admin/complaints/${id}/status?status=${status}`, {
+        method: "PUT"
+    })
+    .then(() => {
+        // Optional: Show a non-intrusive notification instead of an alert
+        console.log("Status Updated");
+    });
+}
+</script>
+
+</body>
+</html>

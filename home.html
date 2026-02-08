@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ResolveHub</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            background-color: #f4f7f6; 
+            color: #333; 
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        header { background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1rem 0; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #0056b3; }
+        .nav-links a { margin: 0 15px; text-decoration: none; color: #555; font-weight: 500; }
+        .nav-links a:hover { color: #0056b3; }
+        .cta-button { 
+            background-color: #007bff; 
+            color: white; 
+            padding: 12px 25px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            transition: background-color 0.3s, transform 0.2s;
+            display: inline-block;
+        }
+        .cta-button:hover { 
+            background-color: #0056b3; 
+            transform: translateY(-2px);
+        }
+
+        /* --- HERO SECTION WITH BACKGROUND IMAGE --- */
+        .hero { 
+            text-align: center; 
+            padding: 100px 20px; 
+            /* Use a placeholder image. Replace this URL with your own! */
+            background-image: linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 123, 255, 0.7)), 
+                              url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1974');
+            background-size: cover;
+            background-position: center;
+            color: white; 
+            position: relative;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero .cta-button {
+            background-color: white;
+            color: #007bff;
+            font-size: 1.1rem;
+        }
+        .hero .cta-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* --- HOW IT WORKS SECTION WITH ICONS --- */
+        .how-it-works { padding: 60px 20px; text-align: center; background-color: #ffffff; }
+        .how-it-works h2 { margin-bottom: 40px; font-size: 2rem; }
+        .steps { display: flex; justify-content: space-around; margin-top: 30px; gap: 30px; }
+        .step { flex-basis: 30%; }
+        .step-icon {
+            font-size: 3.5rem;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .step h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .step p { color: #666; }
+
+        /* --- NEW FEATURES SECTION --- */
+        .features {
+            background-color: #f8f9fa;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .features h2 { margin-bottom: 40px; font-size: 2rem; }
+        .features-grid {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+        }
+        .feature-item {
+            flex-basis: 30%;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover {
+            transform: translateY(-10px);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #28a745; /* A different color for variety */
+            margin-bottom: 15px;
+        }
+
+        /* --- TRACK SECTION --- */
+        .track-section { background-color: #e9ecef; padding: 60px 20px; text-align: center; }
+        .track-section h2 { margin-bottom: 15px; }
+
+        /* --- FOOTER --- */
+        footer { 
+            text-align: center; 
+            padding: 40px 20px; 
+            background-color: #2c3e50; /* A slightly different dark color */
+            color: white; 
+            margin-top: 0; /* Removed margin as sections now flow */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">ResolveHub</div>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="Complaint.html">Register Complaint</a>
+                <a href="track.html">Track Status</a>
+                <a href="Complaint.html" class="cta-button">Get Started</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="container">
+            <h1>Your Voice, Heard. Your Issues, Resolved.</h1>
+            <p>Submit your concerns easily and monitor their progress in real-time with our transparent and efficient system.</p>
+            <a href="Complaint.html" class="cta-button">Register a New Complaint</a>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>1. Submit Complaint</h3>
+                    <p>Fill out our simple and secure form with all the necessary details.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-fingerprint"></i></div>
+                    <h3>2. Get Complaint ID</h3>
+                    <p>Instantly receive a unique ID to track your case.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-search-location"></i></div>
+                    <h3>3. Track Status</h3>
+                    <p>Log in anytime to see the real-time status of your complaint.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW FEATURES SECTION -->
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose ResolveHub?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Secure & Confidential</h3>
+                    <p>Your data is protected with top-tier security, ensuring your information remains confidential.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                    <h3>Fast Response</h3>
+                    <p>We are committed to providing timely acknowledgments and swift resolutions to your issues.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Transparent Tracking</h3>
+                    <p>Follow your complaint's journey every step of the way with our easy-to-use tracking system.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="track-section">
+        <div class="container">
+            <h2>Already Filed a Complaint?</h2>
+            <p>Click below to track the current status of your submission.</p>
+            <a href="track.html" class="cta-button">Track Your Complaint</a>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 ResolveHub. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

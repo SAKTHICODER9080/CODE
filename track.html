@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaint Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .tracker-container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tracker-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background-size: 200% 100%;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            transition: color 0.3s;
+        }
+
+        #complaintId {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        #complaintId:focus {
+            border-color: #667eea;
+            outline: none;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #complaintId:focus + i {
+            color: #667eea;
+        }
+
+        button {
+            padding: 14px 30px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #statusBox {
+            display: none;
+            border: none;
+            padding: 0;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-header {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .status-content {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 0 0 10px 10px;
+            border: 2px solid #e0e0e0;
+            border-top: none;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            font-weight: 600;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-value {
+            color: #333;
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-in-progress {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .status-resolved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-closed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .no-results i {
+            font-size: 48px;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading i {
+            font-size: 24px;
+            color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .help-text {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .tracker-container {
+                padding: 30px 20px;
+            }
+            
+            .search-section {
+                flex-direction: column;
+            }
+            
+            .status-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .status-value {
+                text-align: left;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="tracker-container">
+    <h2>Track Your Complaint</h2>
+    
+    <div class="search-section">
+        <div class="input-wrapper">
+            <input type="text" id="complaintId" placeholder="Enter Complaint ID">
+            <i class="fas fa-hashtag"></i>
+        </div>
+        <button onclick="checkStatus()">
+            <i class="fas fa-search"></i>
+            Check Status
+        </button>
+    </div>
+
+    <div class="loading" id="loading">
+        <i class="fas fa-spinner"></i>
+        <p>Fetching complaint details...</p>
+    </div>
+
+    <div id="statusBox">
+        <div class="status-header">
+            <i class="fas fa-clipboard-check"></i>
+            <h3>Complaint Status</h3>
+        </div>
+        <div class="status-content">
+            <div class="status-item">
+                <span class="status-label">
+                    <i class="fas fa-hashtag"></i>
+                    Complaint ID
+                </span>
+                <span class="status-value" id="cid"></span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">
+                    <i class="fas fa-info-circle"></i>
+                    Status
+                </span>
+                <span class="status-value" id="status"></span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">
+                    <i class="fas fa-user-tie"></i>
+                    Assigned To
+                </span>
+                <span class="status-value" id="assigned"></span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">
+                    <i class="fas fa-clock"></i>
+                    Last Updated
+                </span>
+                <span class="status-value" id="updated"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-text">
+        <i class="fas fa-info-circle"></i>
+        Enter your complaint ID to track the current status of your complaint
+    </div>
+</div>
+
+<script>
+function checkStatus() {
+    const id = document.getElementById("complaintId").value.trim();
+    
+    if (!id) {
+        alert("Please enter a Complaint ID");
+        return;
+    }
+
+    // Show loading
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("statusBox").style.display = "none";
+
+    fetch("http://localhost:8080/api/complaints/complaint/" + id)
+        .then(res => {
+            if (!res.ok) throw new Error("Complaint not found");
+            return res.json();
+        })
+        .then(data => {
+            document.getElementById("cid").innerText = data.complaintNumber;
+            
+            // Format status with badge
+            const statusElement = document.getElementById("status");
+            const status = data.status ? data.status.toLowerCase() : "pending";
+            statusElement.innerHTML = `<span class="status-badge status-${status.replace(/\s+/g, '-')}">${data.status || "Pending"}</span>`;
+            
+            document.getElementById("assigned").innerText = data.assignedTo || "Not assigned yet";
+            document.getElementById("updated").innerText = data.lastUpdated || "Not updated";
+            
+            // Hide loading and show status
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("statusBox").style.display = "block";
+        })
+        .catch(err => {
+            document.getElementById("loading").style.display = "none";
+            
+            // Show error message
+            const statusBox = document.getElementById("statusBox");
+            statusBox.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Complaint Not Found</h3>
+                    <p>${err.message}</p>
+                    <p>Please check your complaint ID and try again.</p>
+                </div>
+            `;
+            statusBox.style.display = "block";
+        });
+}
+
+// Allow Enter key to trigger search
+document.getElementById("complaintId").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        checkStatus();
+    }
+});
+</script>
+
+</body>
+</html>
